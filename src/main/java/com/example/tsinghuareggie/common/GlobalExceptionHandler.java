@@ -24,8 +24,21 @@ public class GlobalExceptionHandler {
             String msg = split[2] + "已存在";
             return R.error(msg);
         }
-
         return R.error("未知错误");
+    }
+
+    /**
+     * 处理自定义的异常，为了让前端展示我们的异常信息，这里需要把异常进行全局捕获，然后返回给前端
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandle(CustomException exception) {
+        // 打印报错日志
+        log.error(exception.getMessage());
+
+        //这里拿到的message是业务类抛出的异常信息，我们把它显示到前端
+        return R.error(exception.getMessage());
 
     }
 

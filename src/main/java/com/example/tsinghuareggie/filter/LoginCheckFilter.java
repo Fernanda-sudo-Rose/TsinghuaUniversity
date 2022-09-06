@@ -1,6 +1,7 @@
 package com.example.tsinghuareggie.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.example.tsinghuareggie.common.BaseContext;
 import com.example.tsinghuareggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -48,7 +49,8 @@ public class LoginCheckFilter implements Filter {
                 "/employee/login",
                 "/employee/logout",
                 "/backend/**",
-                "/front/**"
+                "/front/**",
+                "/common/**"
         };
 
         // 2、判断本次请求是否需要处理
@@ -64,6 +66,11 @@ public class LoginCheckFilter implements Filter {
         // 4、判断登录状态，如果已登录，则直接放行
         if (httpServletRequest.getSession().getAttribute("tsinghuaEmployee") != null) {
             log.info("用户已登录，用户id为：{}", httpServletRequest.getSession().getAttribute("tsinghuaEmployee"));
+
+            // 把用户id存储到本地的threadLocal
+            Long empId = (Long) httpServletRequest.getSession().getAttribute("tsinghuaEmployee");
+            BaseContext.setCurrentId(empId);
+
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
