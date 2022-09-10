@@ -91,11 +91,9 @@ public class CommonController {
                 outputStream.write(buff, 0, len);
                 outputStream.flush();
             }
-
             //关流
             outputStream.close();
             fileInputStream.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
